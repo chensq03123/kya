@@ -1,12 +1,16 @@
 package com.hustunique.kyplanningapp;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.hustunique.Utils.Dbhelper;
+import com.hustunique.Views.MyCircle;
 import com.hustunique.myapplication.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +20,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -33,8 +38,13 @@ public class MainActivity extends Activity {
 	private SwipeMenuListView mainlist;
     private ImageView add_bookbtn;
     private Main_item listitems,head,p1,temp_head,temp_currnext,temp_currpa;
+    private TextView progress,chapprogress,maindate,maindayremain;
+    private MyCircle myCircle;
+    private int cursize;
     //private ArrayList<Map<String,String>> list;
+    private int day,month,completecount,totalcount;
     private ArrayList<Main_item> list;
+    private SharedPreferences sh;
     MainListAdapter adapter;
 
     @Override
@@ -48,7 +58,10 @@ public class MainActivity extends Activity {
             list.add(p1);
             p1=p1.next;
         }
+        totalcount+=list.size()-cursize;
+        sh.edit().putInt("KYAPP_TOTALCOUNT",totalcount).commit();
         adapter.notifyDataSetChanged();
+        initprogress();
     }
 
     @Override
@@ -65,13 +78,20 @@ public class MainActivity extends Activity {
             int actionBarColor = Color.rgb(0x25,0xdc,0xca);
             tintManager.setTintColor(actionBarColor);
         }
-
+        sh=this.getSharedPreferences("mykyapp",0);
         InitWidgets();
         InitSwipeMenuListView(MainActivity.this);
+        initdate();
+        initprogress();
 
     }
     
     private void InitWidgets(){
+        maindate=(TextView)findViewById(R.id.maindate);
+        maindayremain=(TextView)findViewById(R.id.main_dayremain);
+        progress=(TextView)findViewById(R.id.progress);
+        chapprogress=(TextView)findViewById(R.id.chprogress);
+        myCircle=(MyCircle)findViewById(R.id.procircle);
     	mainlist=(SwipeMenuListView)findViewById(R.id.main_listview);
         add_bookbtn=(ImageView)findViewById(R.id.add_bookbtn);
         add_bookbtn.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +134,7 @@ public class MainActivity extends Activity {
                 list.add(p1);
                 p1=p1.next;
             }
-        Log.i("oncreate",String.valueOf(list.size()));
+        cursize=list.size();
         adapter=new MainListAdapter(MainActivity.this, list);
 	        mainlist.setAdapter(adapter);
 	        mainlist.setMenuCreator(creator);
@@ -181,17 +201,21 @@ public class MainActivity extends Activity {
                 p1 = p1.next;
             }
             adapter.notifyDataSetChanged();
+            cursize--;
+            sh.edit().putInt("KYAPP_TOTALCOUNT",totalcount-1).commit();
+            initprogress();
             Intent intent = new Intent(DataConstances.POPULIST_ACTION);
             sendBroadcast(intent);
     }
 
     private void completeplan(int index){
 
-        Log.i("sssssss",String.valueOf(index)+list.get(index).item.get("chapname"));
-
-        int id=Integer.parseInt(list.get(index).item.get("chapid"));
+       int id=Integer.parseInt(list.get(index).item.get("chapid"));
         Delete(index);
         Dbhelper.updatechaptag(2,id);
+        cursize--;
+        sh.edit().putInt("KYAPP_COMPLETECOUNT",completecount+1).commit();
+        initprogress();
     }
 
     private int dp2px(int dp) {
@@ -199,5 +223,40 @@ public class MainActivity extends Activity {
                 getResources().getDisplayMetrics());
     }
 
+    private void initdate(){
+        Date date=new Date();
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(date);
+        month=calendar.get(Calendar.MONTH)+1;
+        day=calendar.get(Calendar.DAY_OF_MONTH);
+        maindate.setText(DataConstances.getMonth(month)+day);
+    }
+
+    private void initprogress(){
+        int curday=sh.getInt("KYAPP_CURRENTDAY",0);
+
+        if(curday==0||curday!=day){
+            sh.edit().putInt("KYAPP_CURRENTDAY",day).commit();
+            totalcount=list.size();
+            completecount=0;
+            sh.edit().putInt("KYAPP_TOTALCOUNT",totalcount).commit();
+            sh.edit().putInt("KYAPP_COMPLETECOUNT",0).commit();
+        }else{
+            totalcount=sh.getInt("KYAPP_TOTALCOUNT",0);
+            completecount=sh.getInt("KYAPP_COMPLETECOUNT",0);
+        }
+
+        if(totalcount==0) {
+            progress.setText("0%");
+            chapprogress.setText("0/0");
+        }else{
+            int pro=(int)(((float)completecount/(float)totalcount)*100);
+            progress.setText(String.valueOf(pro)+"%");
+            String cp=completecount+"/"+totalcount;
+            chapprogress.setText(cp);
+            myCircle.setProgress((float)completecount/(float)totalcount);
+        }
+
+    }
 
 }

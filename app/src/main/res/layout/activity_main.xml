@@ -39,7 +39,8 @@
                	android:layout_marginTop="20dp"
                	android:layout_marginLeft="16dp"
                	android:layout_marginBottom="20dp"
-                android:layout_height="50dp" >
+                android:layout_height="50dp"
+                android:id="@+id/procircle">
             </com.hustunique.Views.MyCircle>
 			
             <TextView 
@@ -79,7 +80,8 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="5dp"
                 android:textSize="22sp"
-                android:text="Oct.1" />
+                android:text="Oct.1"
+                android:id="@+id/maindate" />
 				
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -100,7 +102,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="#25dcca"
                      android:textSize="23sp"
-                    android:text="210" />
+                    android:text="210"
+                    android:id="@+id/main_dayremain" />
 					
                 <TextView
                     android:layout_width="wrap_content"

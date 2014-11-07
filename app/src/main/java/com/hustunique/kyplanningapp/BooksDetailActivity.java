@@ -59,7 +59,7 @@ public class BooksDetailActivity extends Activity {
 
 
         booklist=Dbhelper.querybook("select * from book where id="+id,null);
-        list= Dbhelper.querychapter("select * from chaptable where bookid="+id,null);
+        list= Dbhelper.querychapter("select * from chaptable where bookid="+id+" order by tag asc",null);
         map=booklist.get(0);
         color=Integer.valueOf(map.get("color"));
         largpoint.setColor(color);

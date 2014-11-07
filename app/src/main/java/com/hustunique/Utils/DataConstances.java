@@ -12,7 +12,7 @@ public class DataConstances {
     private static final String[] months={"Jan.","Feb.","Mar.","Apr.","May.","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."};
 
     public static String getMonth(int month){
-        return months[month+1];
+        return months[month];
     }
 
 

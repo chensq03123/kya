@@ -203,8 +203,8 @@ public class AddBooksActivity extends Activity{
 	    for(int i=0;i<DataConstances.colors.length;i++){
 
             Pointwithcolor point=new Pointwithcolor(AddBooksActivity.this);
-            LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(dp2px(60),dp2px(60));
-            layoutParams.setMargins(dp2px(10), dp2px(10), dp2px(10), dp2px(10));
+            LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(dp2px(40),dp2px(40));
+            layoutParams.setMargins(dp2px(6), dp2px(6), dp2px(6), dp2px(6));
             point.setColor(DataConstances.colors[i]);
             point.setOnClickListener(new OnClickListener() {
                 @Override

@@ -109,7 +109,7 @@ public class MyCircle extends View{
         setMeasuredDimension(meas, meas);
     }
     
-    public void setProgress(int p) {
+    public void setProgress(float p) {
         mProgress = p;
         invalidate();
     }
