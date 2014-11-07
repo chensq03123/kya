@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/chapterslayot_acitionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#25dcca"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加计划"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#fff"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:layout_gravity="right"
+            android:layout_margin="14dp"
+            android:textSize="18sp"
+            android:textColor="@drawable/textviewbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addplan_completebtn"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="完成"/>
+
+    </FrameLayout>
+
+    	<LinearLayout 
+    	    android:layout_width="match_parent"
+    	    android:layout_height="wrap_content"
+    	    android:orientation="horizontal">
+    	    
+    	    <FrameLayout 
+    	        android:layout_width="wrap_content"
+    	        android:layout_height="wrap_content"
+    	        android:gravity="center_horizontal">
+    	        
+    	        <com.hustunique.Views.Pointwithcolor
+                    android:id="@+id/detail_point"
+    	            android:layout_width="96dp"
+    	            android:layout_height="96dp"
+    	            android:layout_margin="30dp"
+    	              android:layout_gravity="center_horizontal" >
+    	        </com.hustunique.Views.Pointwithcolor>
+
+    	        <TextView
+                    android:layout_width="match_parent"
+    	            android:layout_height="match_parent"
+    	            android:layout_gravity="center"
+    	            android:textColor="#fff"
+    	            android:textSize="50sp"
+    	            android:text="数"
+                    android:id="@+id/detail_booknamechar" />
+
+    	    </FrameLayout>
+    	    
+    	    <LinearLayout 
+    	        android:layout_width="match_parent"
+    	        android:layout_height="match_parent"
+    	        android:orientation="vertical"
+    	        android:gravity="center"
+    	        >
+    	        
+    	        <TextView
+                    android:id="@+id/detail_bookname"
+    	            android:layout_width="match_parent"
+    	            android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:textSize="18sp"
+    	            android:text="数学分析三"
+    	            android:gravity="center"/>
+    	          <TextView
+                    android:id="@+id/detail_progress"
+    	            android:layout_width="match_parent"
+    	            android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+    	            android:gravity="center"
+                    android:textColor="@android:color/darker_gray"
+    	          	android:text="3/8"/>
+    	            <TextView
+                    android:id="@+id/detail_author"
+    	            android:layout_width="match_parent"
+    	            android:layout_height="wrap_content"
+    	            android:gravity="center"
+                    android:textColor="@android:color/darker_gray"
+    	            android:text="华东师范大学数学系"/>
+    	              <TextView
+                    android:id="@+id/detail_publisher"
+    	            android:layout_width="match_parent"
+    	            android:layout_height="wrap_content"
+    	            android:gravity="center"
+                    android:layout_marginBottom="30dp"
+                    android:textColor="@android:color/darker_gray"
+    	            android:text="高等教育出版社"/>
+    	        
+    	    </LinearLayout>
+    	    
+    	</LinearLayout>
+    	
+    	<ImageView 
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="2dp"
+	    	android:background="#eee"/>
+    	
+		<ListView 
+		    android:id="@+id/chapter_listview"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent">
+		    </ListView>
+</LinearLayout>

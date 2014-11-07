@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/allbookslayot_acitionbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#25dcca"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="所有书本"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#fff"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:layout_gravity="right"
+            android:layout_margin="14dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@drawable/textviewbtn"
+            android:id="@+id/addbook_btn"
+            android:text="添加"/>
+
+    </FrameLayout>
+
+
+    <ListView 
+        android:id="@+id/allbooks_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
+
+</LinearLayout>

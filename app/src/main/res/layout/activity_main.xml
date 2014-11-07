@@ -1,0 +1,141 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:fitsSystemWindows="true"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    tools:context="com.hustunique.kyplanningapp.MainActivity" >
+    <FrameLayout
+     android:id="@+id/mianlayot_acitionbar"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="#25dcca"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的计划"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            android:textColor="#fff"
+            android:textSize="20sp"/>
+        </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:showDividers="end"
+        android:orientation="horizontal" >
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <com.hustunique.Views.MyCircle
+                android:layout_width="50dp"
+               	android:layout_marginTop="20dp"
+               	android:layout_marginLeft="16dp"
+               	android:layout_marginBottom="20dp"
+                android:layout_height="50dp" >
+            </com.hustunique.Views.MyCircle>
+			
+            <TextView 
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="14dp"
+                android:textColor="#25dcca"
+                android:textSize="28sp"
+                android:text="20%"/>
+            
+            <TextView 
+                android:id="@+id/chprogress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="30dp"
+                android:layout_marginLeft="8dp"
+                android:textColor="#25dcca"
+                android:text="2/10"/>
+            
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" 
+            android:gravity="center|center_vertical">
+			<TextView 
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:textSize="22sp"
+                android:text="Oct.1" />
+				
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+				
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                     android:textSize="18sp"
+                    android:text="距离考研还有" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#25dcca"
+                     android:textSize="23sp"
+                    android:text="210" />
+					
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:textSize="18sp"
+                    android:text="天" />
+            </LinearLayout>
+            <TextView 
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="1"/>
+        </LinearLayout>
+        
+    
+        
+    </LinearLayout>
+		<ImageView 
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="2dp"
+	    	android:background="#eee"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:id="@+id/main_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></com.baoyz.swipemenulistview.SwipeMenuListView>
+        <ImageView
+            android:id="@+id/add_bookbtn"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/addplanselector"
+            android:layout_gravity="bottom|right"
+            />
+    </FrameLayout>
+</LinearLayout>
