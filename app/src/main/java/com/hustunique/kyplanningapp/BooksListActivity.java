@@ -1,7 +1,10 @@
 package com.hustunique.kyplanningapp;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -10,12 +13,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hustunique.Utils.DataConstances;
 import com.hustunique.myapplication.R;
 import com.hustunique.Adapters.BooksBaseAdapter;
 import com.hustunique.Utils.Dbhelper;
@@ -34,6 +41,22 @@ public class BooksListActivity extends Activity {
     private BooksBaseAdapter madapter;
     private TextView addbtn;
     private MyAsyncTask task;
+    private LinearLayout informlayout;
+    private Animation animin,animaout;
+    private BroadcastReceiver mreceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().compareTo(DataConstances.ADDBOOK_ACTION)==0){
+                //Toast.makeText(BooksListActivity.this,DataConstances.ADDBOOK_ACTION,Toast.LENGTH_LONG).show();
+                int colorseleted=intent.getIntExtra("COLOR_SELECTED",Color.rgb(0xff,0x00,0x00));
+                mlist= Dbhelper.querybook("select * from book",null);
+                madapter.UpdateData(mlist);
+                madapter.notifyDataSetChanged();
+                AnimationController(colorseleted);
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +72,17 @@ public class BooksListActivity extends Activity {
             int actionBarColor = Color.rgb(0x25,0xdc,0xca);
             tintManager.setTintColor(actionBarColor);
         }
+
+        //Regist addbook receiver
+        IntentFilter filter=new IntentFilter();
+        filter.addAction(DataConstances.ADDBOOK_ACTION);
+        filter.setPriority(Integer.MAX_VALUE);
+        registerReceiver(mreceiver, filter);
+
+        informlayout=(LinearLayout)findViewById(R.id.success);
+
+
+
 
         addbtn=(TextView)findViewById(R.id.addbook_btn);
         addbtn.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +129,37 @@ public class BooksListActivity extends Activity {
                 Log.i("asynctastflase",String.valueOf(mlist.size()));
             }
         }
+    }
+
+
+    private void AnimationController(int colorselected){
+        informlayout.setBackgroundColor(colorselected);
+        animin= AnimationUtils.loadAnimation(BooksListActivity.this,R.anim.animation_in);
+        animaout=AnimationUtils.loadAnimation(BooksListActivity.this,R.anim.animation_out);
+        animin.setDuration(1000);
+        animaout.setStartOffset(3000);
+        animaout.setDuration(1000);
+        animin.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                informlayout.startAnimation(animaout);
+                informlayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        //informlayout.setAnimation(animaout);
+        informlayout.setAnimation(animin);
+        informlayout.startAnimation(animin);
+        informlayout.setVisibility(View.VISIBLE);
     }
 
     @Override

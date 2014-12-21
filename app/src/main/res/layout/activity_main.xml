@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="我的计划"
+            android:fontFamily="sans-serif-light"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_marginTop="14dp"
             android:layout_marginBottom="14dp"
@@ -80,6 +81,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="5dp"
                 android:textSize="22sp"
+                android:fontFamily="sans-serif-medium"
                 android:text="Oct.1"
                 android:id="@+id/maindate" />
 				
@@ -133,8 +135,8 @@
             android:layout_height="wrap_content"></com.baoyz.swipemenulistview.SwipeMenuListView>
         <ImageView
             android:id="@+id/add_bookbtn"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="20dp"
             android:src="@drawable/addplanselector"

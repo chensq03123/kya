@@ -23,9 +23,10 @@ public class MyBroadcastReciever extends BroadcastReceiver {
             Main_item p1=DataConstances.header;
             while(p1!=null){
                 Log.i(p1.item.get("chapname"),p1.item.get("color"));
+                int id=Integer.parseInt(p1.item.get("chapid"));
+                Dbhelper.updatechaptag(1,id);
                 Dbhelper.insertmainitem(p1);
                 p1=p1.next;
-
             }
         }else if(action.compareTo(DataConstances.POPULIST_ACTION)==0){
             Dbhelper.cleartable();

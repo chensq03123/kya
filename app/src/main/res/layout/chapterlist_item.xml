@@ -25,11 +25,24 @@
         android:gravity="center_vertical|left"
         android:text="Chap.17 多元函数微分学"
         />
+        <FrameLayout
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_marginRight="16dp"
+                android:id="@+id/tagtext"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/darker_gray"
+                android:text="已添加"/>
 		<ImageView 
 		    android:id="@+id/deletebtn"
 		    android:layout_width="24dp"
 		    android:layout_height="24dp"
 		    android:layout_margin="12dp"
 		    android:src="@drawable/ic_launcher"
-		    />	
+		    />
+        </FrameLayout>
 </LinearLayout>

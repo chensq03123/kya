@@ -74,7 +74,8 @@ public class AddBooksActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.addbook_layout);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        setContentView(R.layout.addbook_layout);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             tintManager = new SystemBarTintManager(this);
@@ -152,7 +153,6 @@ public class AddBooksActivity extends Activity{
         adapter=new ChapBaseAdapter(AddBooksActivity.this, grouplist,colorselected);
 		chaplistview.addFooterView(footer);
 		chaplistview.setAdapter(adapter);
-
         completebtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,6 +174,9 @@ public class AddBooksActivity extends Activity{
                    for(int i=0;i<grouplist.size();i++){
                        Dbhelper.insertchap(grouplist.get(i),id);
                    }
+                    Intent intent=new Intent(DataConstances.ADDBOOK_ACTION);
+                    intent.putExtra("COLOR_SELECTED",colorselected);
+                    sendBroadcast(intent);
                     AddBooksActivity.this.finish();
                 }
 
@@ -190,21 +193,29 @@ public class AddBooksActivity extends Activity{
 		bookname=(EditText)findViewById(R.id.add_bookname);
 		author=(EditText)findViewById(R.id.add_author);
 		publisher=(EditText)findViewById(R.id.add_publisher);
+        bookname.setTag(1);
+        author.setTag(2);
+        publisher.setTag(3);
         bookname.setOnClickListener(new OnEdittextclicklistenner());
         author.setOnClickListener(new OnEdittextclicklistenner());
         publisher.setOnClickListener(new OnEdittextclicklistenner());
-
+        bookname.setOnKeyListener(new MyOnKeyListenner());
+        author.setOnKeyListener(new MyOnKeyListenner());
+        publisher.setOnKeyListener(new MyOnKeyListenner());
 		grouplist=new ArrayList<String>();
 		childlist=new ArrayList<ArrayList<String>>();
         Colorselect_layout=(LinearLayout)findViewById(R.id.colorselect_layout);
 	    colorlist=new ArrayList<Pointwithcolor>();
         actionbar=(FrameLayout)findViewById(R.id.chapterslayot_acitionbar);
+        actionbar.setFocusable(true);
+        actionbar.setFocusableInTouchMode(true);
+        actionbar.requestFocus();
         completebtn=(TextView)findViewById(R.id.addbook_complete);
 	    for(int i=0;i<DataConstances.colors.length;i++){
 
             Pointwithcolor point=new Pointwithcolor(AddBooksActivity.this);
-            LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(dp2px(40),dp2px(40));
-            layoutParams.setMargins(dp2px(6), dp2px(6), dp2px(6), dp2px(6));
+            LinearLayout.LayoutParams layoutParams= new LinearLayout.LayoutParams(dp2px(32),dp2px(32));
+            layoutParams.setMargins(dp2px(4), dp2px(4), dp2px(4), dp2px(4));
             point.setColor(DataConstances.colors[i]);
             point.setOnClickListener(new OnClickListener() {
                 @Override
@@ -300,6 +311,9 @@ public class AddBooksActivity extends Activity{
         public void onClick(View view) {
             if(view instanceof  EditText) {
                 EditText t = (EditText) view;
+                if(!t.isCursorVisible())
+                    t.setCursorVisible(true);
+                t.requestFocus();
                 t.setEnabled(true);
                 t.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
                 t.setSelection(t.getText().toString().length());
@@ -312,6 +326,26 @@ public class AddBooksActivity extends Activity{
     private int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
+    }
+
+     class MyOnKeyListenner implements View.OnKeyListener {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            int tag=(Integer)(v.getTag());
+            if(keyCode == KeyEvent.KEYCODE_ENTER&&event.getAction()==KeyEvent.ACTION_UP) {
+                switch (tag) {
+                    case 1: {
+                        author.requestFocus();
+                        break;
+                    }
+                    case 2:{
+                        publisher.requestFocus();
+                        break;
+                    }
+                }
+            }
+            return false;
+        }
     }
 
 }

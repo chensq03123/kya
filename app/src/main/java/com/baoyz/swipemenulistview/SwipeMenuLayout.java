@@ -1,6 +1,8 @@
 package com.baoyz.swipemenulistview;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.ScrollerCompat;
 import android.util.AttributeSet;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,10 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Interpolator;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.hustunique.Utils.MyApplication;
 
 /**
  * 
@@ -45,14 +52,15 @@ public class SwipeMenuLayout extends FrameLayout {
 	private int position;
 	private Interpolator mCloseInterpolator;
 	private Interpolator mOpenInterpolator;
-
-	public SwipeMenuLayout(View contentView, SwipeMenuView menuView) {
-		this(contentView, menuView, null, null);
+    TextView tv;
+	public SwipeMenuLayout(TextView tv,View contentView, SwipeMenuView menuView) {
+		this(tv,contentView, menuView, null, null);
 	}
 
-	public SwipeMenuLayout(View contentView, SwipeMenuView menuView,
+	public SwipeMenuLayout(TextView tv,View contentView, SwipeMenuView menuView,
 			Interpolator closeInterpolator, Interpolator openInterpolator) {
 		super(contentView.getContext());
+        this.tv=tv;
 		mCloseInterpolator = closeInterpolator;
 		mOpenInterpolator = openInterpolator;
 		mContentView = contentView;
@@ -133,8 +141,10 @@ public class SwipeMenuLayout extends FrameLayout {
 		mMenuView.setId(MENU_VIEW_ID);
 		mMenuView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
+        this.tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT));
 
-		addView(mContentView);
+		addView(mContentView); addView(this.tv);
 		addView(mMenuView);
 
 		// if (mContentView.getBackground() == null) {

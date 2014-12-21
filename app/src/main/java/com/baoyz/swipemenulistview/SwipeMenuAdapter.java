@@ -5,13 +5,16 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 import android.widget.WrapperListAdapter;
 
 import com.baoyz.swipemenulistview.SwipeMenuListView.OnMenuItemClickListener;
 import com.baoyz.swipemenulistview.SwipeMenuView.OnSwipeItemClickListener;
+import com.hustunique.myapplication.R;
 
 /**
  * 
@@ -50,6 +53,7 @@ public class SwipeMenuAdapter implements WrapperListAdapter,
 	public View getView(int position, View convertView, ViewGroup parent) {
 		SwipeMenuLayout layout = null;
 		if (convertView == null) {
+            TextView rightview=(TextView) LayoutInflater.from(mContext).inflate(R.layout.layout_rightfling,null);
 			View contentView = mAdapter.getView(position, convertView, parent);
 			SwipeMenu menu = new SwipeMenu(mContext);
 			menu.setViewType(mAdapter.getItemViewType(position));
@@ -58,7 +62,7 @@ public class SwipeMenuAdapter implements WrapperListAdapter,
 					(SwipeMenuListView) parent);
 			menuView.setOnSwipeItemClickListener(this);
 			SwipeMenuListView listView = (SwipeMenuListView) parent;
-			layout = new SwipeMenuLayout(contentView, menuView,
+			layout = new SwipeMenuLayout(rightview,contentView, menuView,
 					listView.getCloseInterpolator(),
 					listView.getOpenInterpolator());
 			layout.setPosition(position);

@@ -68,4 +68,8 @@ public class BooksBaseAdapter extends BaseAdapter {
         TextView bookname,progress,booknamechar;
         Pointwithcolor point;
     }
+
+    public void UpdateData(ArrayList<Map<String,String>> list){
+        this.mlist=list;
+    }
 }

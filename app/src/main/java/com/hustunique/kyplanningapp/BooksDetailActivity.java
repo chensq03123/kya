@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.RotateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,11 +32,11 @@ public class BooksDetailActivity extends Activity {
     private TextView booknamechar,bookname,publisher,author,progress;
     private TextView completebtn;
     private int color;
+    private FrameLayout actionbar;
     private RotateAnimation animation;
     private  Map<String,String> map;
     ArrayList<Map<String,String>> list,booklist;
-
-
+    SystemBarTintManager tintManager;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -45,7 +46,7 @@ public class BooksDetailActivity extends Activity {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            SystemBarTintManager tintManager = new SystemBarTintManager(this);
+            tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             // Holo light action bar color is #DDDDDD
             int actionBarColor = Color.rgb(0x25, 0xdc, 0xca);
@@ -57,11 +58,14 @@ public class BooksDetailActivity extends Activity {
 
         String id=getIntent().getStringExtra("BOOKSID");
 
-
+        actionbar=(FrameLayout)findViewById(R.id.chapterslayot_acitionbar);
         booklist=Dbhelper.querybook("select * from book where id="+id,null);
         list= Dbhelper.querychapter("select * from chaptable where bookid="+id+" order by tag asc",null);
         map=booklist.get(0);
         color=Integer.valueOf(map.get("color"));
+        actionbar.setBackgroundColor(color);
+        if(tintManager!=null)
+            tintManager.setTintColor(color);
         largpoint.setColor(color);
         bookname.setText(map.get("bookname"));
         booknamechar.setText(map.get("bookname").substring(0,1));

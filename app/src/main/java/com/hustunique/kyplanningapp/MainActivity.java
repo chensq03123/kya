@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.hustunique.Utils.Dbhelper;
+import com.hustunique.Utils.MyApplication;
 import com.hustunique.Views.MyCircle;
 import com.hustunique.myapplication.R;
 import android.app.Activity;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +43,7 @@ public class MainActivity extends Activity {
     private TextView progress,chapprogress,maindate,maindayremain;
     private MyCircle myCircle;
     private int cursize;
-    //private ArrayList<Map<String,String>> list;
+
     private int day,month,completecount,totalcount;
     private ArrayList<Main_item> list;
     private SharedPreferences sh;
@@ -58,7 +60,7 @@ public class MainActivity extends Activity {
             list.add(p1);
             p1=p1.next;
         }
-        totalcount+=list.size()-cursize;
+        totalcount+=list.size()- MyApplication.currsize;
         sh.edit().putInt("KYAPP_TOTALCOUNT",totalcount).commit();
         adapter.notifyDataSetChanged();
         initprogress();
@@ -78,6 +80,7 @@ public class MainActivity extends Activity {
             int actionBarColor = Color.rgb(0x25,0xdc,0xca);
             tintManager.setTintColor(actionBarColor);
         }
+
         sh=this.getSharedPreferences("mykyapp",0);
         InitWidgets();
         InitSwipeMenuListView(MainActivity.this);
@@ -87,6 +90,7 @@ public class MainActivity extends Activity {
     }
     
     private void InitWidgets(){
+
         maindate=(TextView)findViewById(R.id.maindate);
         maindayremain=(TextView)findViewById(R.id.main_dayremain);
         progress=(TextView)findViewById(R.id.progress);
@@ -134,7 +138,7 @@ public class MainActivity extends Activity {
                 list.add(p1);
                 p1=p1.next;
             }
-        cursize=list.size();
+        MyApplication.currsize=list.size();
         adapter=new MainListAdapter(MainActivity.this, list);
 	        mainlist.setAdapter(adapter);
 	        mainlist.setMenuCreator(creator);
@@ -201,7 +205,7 @@ public class MainActivity extends Activity {
                 p1 = p1.next;
             }
             adapter.notifyDataSetChanged();
-            cursize--;
+            MyApplication.currsize--;
             sh.edit().putInt("KYAPP_TOTALCOUNT",totalcount-1).commit();
             initprogress();
             Intent intent = new Intent(DataConstances.POPULIST_ACTION);
@@ -211,11 +215,25 @@ public class MainActivity extends Activity {
     private void completeplan(int index){
 
        int id=Integer.parseInt(list.get(index).item.get("chapid"));
-        Delete(index);
+        if(index==0){
+            DataConstances.header=DataConstances.header.next;
+        }else {
+            Main_item temp = list.get(index - 1);
+            temp.next = list.get(index).next;
+        }
+        p1 =DataConstances.header;
+        list.clear();
+        while (p1 != null) {
+            list.add(p1);
+            p1 = p1.next;
+        }
+        adapter.notifyDataSetChanged();
+        MyApplication.currsize--;
         Dbhelper.updatechaptag(2,id);
-        cursize--;
         sh.edit().putInt("KYAPP_COMPLETECOUNT",completecount+1).commit();
         initprogress();
+        Intent intent = new Intent(DataConstances.POPULIST_ACTION);
+        sendBroadcast(intent);
     }
 
     private int dp2px(int dp) {
@@ -227,7 +245,7 @@ public class MainActivity extends Activity {
         Date date=new Date();
         Calendar calendar=Calendar.getInstance();
         calendar.setTime(date);
-        month=calendar.get(Calendar.MONTH)+1;
+        month=calendar.get(Calendar.MONTH);
         day=calendar.get(Calendar.DAY_OF_MONTH);
         maindate.setText(DataConstances.getMonth(month)+day);
     }

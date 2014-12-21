@@ -66,8 +66,8 @@ public class ChapterBaseAdapter  extends BaseAdapter{
 	@Override
 	public View getView(final int arg0, View arg1, ViewGroup arg2) {
 		// TODO Auto-generated method stub
-       final Animation animation= AnimationUtils.loadAnimation(mcontext,R.anim.btn_rotate);
-
+       final Animation animationforward= AnimationUtils.loadAnimation(mcontext,R.anim.btn_rotate);
+       final Animation animationback=AnimationUtils.loadAnimation(mcontext,R.anim.btn_rotateback);
 		ViewHolder holder;
 		if(arg1==null){
 			holder=new ViewHolder();
@@ -75,12 +75,14 @@ public class ChapterBaseAdapter  extends BaseAdapter{
 			holder.chapname=(TextView)arg1.findViewById(R.id.chapname);
 			holder.img=(ImageView)arg1.findViewById(R.id.deletebtn);
 			holder.point=(Pointwithcolor)arg1.findViewById(R.id.chap_point);
+            holder.tagtext=(TextView)arg1.findViewById(R.id.tagtext);
 			arg1.setTag(holder);
 		}else{
 			holder=(ViewHolder) arg1.getTag();
 		}
 
-        animation.setDuration(200);
+        animationforward.setDuration(200);
+        animationback.setDuration(200);
         holder.chapname.setText(mlist.get(arg0).get("chapname"));
         holder.img.setImageResource(R.drawable.rotate);
         holder.point.setColor(this.color);
@@ -89,14 +91,21 @@ public class ChapterBaseAdapter  extends BaseAdapter{
             @Override
             public void onClick(View view) {
                 view.bringToFront();
-                view.setAnimation(animation);
-                Log.i("tag",mlist.get(arg0).get("chapname"));
-                final ImageView v=(ImageView)view;
-                animation.setFillAfter(true);
-                animation.setFillEnabled(true);
-                view.startAnimation(animation);
-                animation.startNow();
-                tags[arg0]=true;
+                if(!tags[arg0]) {
+                    view.setAnimation(animationforward);
+                    animationforward.setFillAfter(true);
+                    animationforward.setFillEnabled(true);
+                    view.startAnimation(animationforward);
+                    animationforward.startNow();
+                    tags[arg0] = true;
+                }else{
+                    view.setAnimation(animationback);
+                    animationback.setFillAfter(true);
+                    animationback.setFillEnabled(true);
+                    view.startAnimation(animationback);
+                    animationback.startNow();
+                    tags[arg0] = false;
+                }
             }
         });
 
@@ -105,11 +114,14 @@ public class ChapterBaseAdapter  extends BaseAdapter{
         int tag=Integer.parseInt(mlist.get(arg0).get("tag"));
         Log.i("tag",String.valueOf(tag));
         if(tag==2){
+            holder.tagtext.setVisibility(View.GONE);
             holder.img.setVisibility(View.GONE);
             holder.point.setColor(Color.GRAY);
         }else if(tag==1){
-
+            holder.img.setVisibility(View.GONE);
+            holder.tagtext.setVisibility(View.VISIBLE);
         }else{
+            holder.tagtext.setVisibility(View.GONE);
             if(tags[arg0]){
                 holder.img.setImageResource(R.drawable.rotatelater);
             }else
@@ -125,7 +137,7 @@ public class ChapterBaseAdapter  extends BaseAdapter{
 
 	private class ViewHolder{
 		Pointwithcolor point;
-		TextView chapname;
+		TextView chapname,tagtext;
 		ImageView img;
 	}
 }

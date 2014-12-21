@@ -25,7 +25,7 @@
         </activity>
         <activity
             android:name="com.hustunique.kyplanningapp.AddBooksActivity"
-            android:windowSoftInputMode="stateHidden"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="@string/app_name" >
         </activity>
         <activity

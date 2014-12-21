@@ -45,34 +45,33 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
-        android:orientation="vertical">
-        
+        android:orientation="vertical"
+       >
+
         <EditText
             android:id="@+id/add_bookname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:singleLine="true"
             android:background="@null"
             android:textSize="18sp"
             android:gravity="left"
-            android:clickable="true"
-            android:focusable="true"
-
             android:hint="点击输入书名"
             />
         <EditText
+            android:singleLine="true"
             android:id="@+id/add_author"
             android:layout_marginTop="10dp"
             android:textSize="15sp"
             android:background="@null"
-            android:clickable="true"
-            android:focusable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="点击输入作者"
             />
         	
         <EditText
+            android:singleLine="true"
             android:id="@+id/add_publisher"
             android:layout_marginTop="5dp"
             android:textSize="15sp"
