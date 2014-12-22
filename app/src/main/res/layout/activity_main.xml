@@ -127,12 +127,19 @@
 	    	android:layout_height="2dp"
 	    	android:background="#eee"/>
     <FrameLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <LinearLayout
+            android:background="#777"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/main_listview"
+            android:divider="#000"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></com.baoyz.swipemenulistview.SwipeMenuListView>
+        </LinearLayout>
         <ImageView
             android:id="@+id/add_bookbtn"
             android:layout_width="64dp"

@@ -1,6 +1,7 @@
 package com.hustunique.Adapters;
 
 import android.content.Context;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,8 +59,23 @@ public class ChapBaseAdapter extends BaseAdapter{
             view.setTag(holder);
         }else
             holder=(ViewHolder) view.getTag();
-
+        final int index=i;
         holder.addtext.setText(mgrouplist.get(i));
+        holder.addtext.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode==KeyEvent.KEYCODE_DEL&&event.getAction()==KeyEvent.ACTION_DOWN){
+                    EditText t=(EditText)v;
+                    String str=t.getText().toString();
+                    if(str.compareTo("")==0){
+                        mgrouplist.remove(index);
+                        notifyDataSetChanged();
+                    }
+
+                }
+                return false;
+            }
+        });
         holder.addpoint.setColor(color);
 
         return view;

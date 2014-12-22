@@ -56,6 +56,7 @@ public class AddBooksActivity extends Activity{
 	private ArrayList<ArrayList<String>> childlist;
 	private ImageView scanbook;
 	private BookInfo book;
+    private ImageView backbtn;
     private EditText newchaptext;
     private ImageView newchapbtn;
 	private EditText addchaptext,bookname,author,publisher;
@@ -210,6 +211,13 @@ public class AddBooksActivity extends Activity{
         actionbar.setFocusable(true);
         actionbar.setFocusableInTouchMode(true);
         actionbar.requestFocus();
+        backbtn=(ImageView)findViewById(R.id.backbtn);
+        backbtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddBooksActivity.this.finish();
+            }
+        });
         completebtn=(TextView)findViewById(R.id.addbook_complete);
 	    for(int i=0;i<DataConstances.colors.length;i++){
 

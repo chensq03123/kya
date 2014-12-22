@@ -5,10 +5,17 @@ import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.WindowManager;
 import android.view.animation.Interpolator;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Scroller;
+
+import com.hustunique.myapplication.R;
 
 /**
  * 
@@ -24,6 +31,23 @@ public class SwipeMenuListView extends ListView {
 
 	private int MAX_Y = 5;
 	private int MAX_X = 3;
+
+    //////////////////////////////
+    private int slidposition;
+    private boolean isslide=false;
+    private int screenwidth;
+    private View itemview;
+    private Scroller mscroller;
+    private static final int SNAP_VELOCITY=600;
+    private VelocityTracker velocityTracker;
+    private int mTouchSlop;
+    private  Removedirection removedirection;
+    private enum Removedirection{
+        Right,Left;
+    }
+
+
+
 	private float mDownX,mUpX;
 	private float mDownY,mUpY;
 	private int mTouchState;
@@ -40,16 +64,25 @@ public class SwipeMenuListView extends ListView {
 
 	public SwipeMenuListView(Context context) {
 		super(context);
+        screenwidth=((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
+        mscroller=new Scroller(context);
+        mTouchSlop= ViewConfiguration.get(getContext()).getScaledTouchSlop();
 		init();
 	}
 
 	public SwipeMenuListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		init();
+        screenwidth=((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
+		mscroller=new Scroller(context);
+        mTouchSlop= ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        init();
 	}
 
 	public SwipeMenuListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+        screenwidth=((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getWidth();
+        mscroller=new Scroller(context);
+        mTouchSlop= ViewConfiguration.get(getContext()).getScaledTouchSlop();
 		init();
 	}
 
@@ -109,87 +142,133 @@ public class SwipeMenuListView extends ListView {
 		return super.onInterceptTouchEvent(ev);
 	}
 
-	@Override
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()){
+            case MotionEvent.ACTION_DOWN:{
+                addVellocityTracker(ev);
+                if(!mscroller.isFinished()){
+                    return super.dispatchTouchEvent(ev);
+                }
+
+                mDownX=(int)ev.getX();
+                mDownY=(int)ev.getY();
+
+                slidposition=pointToPosition((int)mDownX,(int)mDownY);
+                if(slidposition== AdapterView.INVALID_POSITION){
+                    return super.dispatchTouchEvent(ev);
+                }
+
+                itemview=getChildAt(slidposition-getFirstVisiblePosition());
+                break;
+            }
+            case MotionEvent.ACTION_HOVER_MOVE:{
+                if(Math.abs(getScrollVelocity())>SNAP_VELOCITY||(Math.abs(ev.getX()-mDownX)>mTouchSlop&&Math.abs(ev.getY()-mDownY)<mTouchSlop)){
+                    isslide=true;
+                    break;
+                }
+            }
+            case MotionEvent.ACTION_UP:
+                recycleVelocityTracker();
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
 	public boolean onTouchEvent(MotionEvent ev) {
-		if (ev.getAction() != MotionEvent.ACTION_DOWN && mTouchView == null)
-			return super.onTouchEvent(ev);
-		int action = MotionEventCompat.getActionMasked(ev);
-		action = ev.getAction();
-		switch (action) {
-		case MotionEvent.ACTION_DOWN:
-			int oldPos = mTouchPosition;
-			mDownX = ev.getX();
-			mDownY = ev.getY();
-			mTouchState = TOUCH_STATE_NONE;
 
-			mTouchPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
+        if (isslide && slidposition != AdapterView.INVALID_POSITION) {
+            requestDisallowInterceptTouchEvent(true);
+            addVellocityTracker(ev);
+        }
 
-			if (mTouchPosition == oldPos && mTouchView != null
-					&& mTouchView.isOpen()) {
-				mTouchState = TOUCH_STATE_X;
-				mTouchView.onSwipe(ev);
-				return true;
-			}
+            if (ev.getAction() != MotionEvent.ACTION_DOWN && mTouchView == null)
+                return super.onTouchEvent(ev);
+            int action = MotionEventCompat.getActionMasked(ev);
+            action = ev.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    int oldPos = mTouchPosition;
+                    mDownX = ev.getX();
+                    mDownY = ev.getY();
+                    mTouchState = TOUCH_STATE_NONE;
 
-			View view = getChildAt(mTouchPosition - getFirstVisiblePosition());
+                    mTouchPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
 
-			if (mTouchView != null && mTouchView.isOpen()) {
-				mTouchView.smoothCloseMenu();
-				mTouchView = null;
-				return super.onTouchEvent(ev);
-			}
-			if (view instanceof SwipeMenuLayout) {
-				mTouchView = (SwipeMenuLayout) view;
-			}
-			if (mTouchView != null) {
-				mTouchView.onSwipe(ev);
-			}
-			break;
-		case MotionEvent.ACTION_MOVE:
-			float dy = Math.abs((ev.getY() - mDownY));
-			float dx = Math.abs((ev.getX() - mDownX));
-			if (mTouchState == TOUCH_STATE_X) {
-				if (mTouchView != null) {
-					mTouchView.onSwipe(ev);
-				}
-				getSelector().setState(new int[] { 0 });
-				ev.setAction(MotionEvent.ACTION_CANCEL);
-				super.onTouchEvent(ev);
-				return true;
-			} else if (mTouchState == TOUCH_STATE_NONE) {
-				if (Math.abs(dy) > MAX_Y) {
-					mTouchState = TOUCH_STATE_Y;
-				} else if (dx > MAX_X) {
-					mTouchState = TOUCH_STATE_X;
-					if (mOnSwipeListener != null) {
-						mOnSwipeListener.onSwipeStart(mTouchPosition);
-					}
-				}
-			}
-			break;
-		case MotionEvent.ACTION_UP:
-              this.mUpX=ev.getX();
-              this.mUpY=ev.getY();
-              this.onrightFlingListener.onRightFling(mTouchPosition,this.mUpX-this.mDownX,this.mUpX,this.mUpY);
-			if (mTouchState == TOUCH_STATE_X) {
-				if (mTouchView != null) {
-					mTouchView.onSwipe(ev);
-					if (!mTouchView.isOpen()) {
-						mTouchPosition = -1;
-						mTouchView = null;
-					}
-				}
-				if (mOnSwipeListener != null) {
-					mOnSwipeListener.onSwipeEnd(mTouchPosition);
-				}
-				ev.setAction(MotionEvent.ACTION_CANCEL);
-				super.onTouchEvent(ev);
-				return true;
-			}
-			break;
-		}
-		return super.onTouchEvent(ev);
-	}
+                    if (mTouchPosition == oldPos && mTouchView != null
+                            && mTouchView.isOpen()) {
+                        mTouchState = TOUCH_STATE_X;
+                        mTouchView.onSwipe(ev);
+                        return true;
+                    }
+
+                    View view = getChildAt(mTouchPosition - getFirstVisiblePosition());
+
+                    if (mTouchView != null && mTouchView.isOpen()) {
+                        mTouchView.smoothCloseMenu();
+                        mTouchView = null;
+                        return super.onTouchEvent(ev);
+                    }
+                    if (view instanceof SwipeMenuLayout) {
+                        mTouchView = (SwipeMenuLayout) view;
+                    }
+                    if (mTouchView != null) {
+                        mTouchView.onSwipe(ev);
+                    }
+                    break;
+                case MotionEvent.ACTION_MOVE:
+
+                    float dy = Math.abs((ev.getY() - mDownY));
+                    float dx = Math.abs((ev.getX() - mDownX));
+                    if (mTouchState == TOUCH_STATE_X) {
+                        if (mTouchView != null) {
+                            mTouchView.onSwipe(ev);
+                        }
+                        getSelector().setState(new int[]{0});
+                        ev.setAction(MotionEvent.ACTION_CANCEL);
+                        super.onTouchEvent(ev);
+                        return true;
+                    } else if (mTouchState == TOUCH_STATE_NONE) {
+                        if (Math.abs(dy) > MAX_Y) {
+                            mTouchState = TOUCH_STATE_Y;
+                        } else if (dx > MAX_X) {
+                            mTouchState = TOUCH_STATE_X;
+                            if (mOnSwipeListener != null) {
+                                mOnSwipeListener.onSwipeStart(mTouchPosition);
+                            }
+                        }
+                    }
+                     /*int x=(int)ev.getX();
+                     int deltax=(int)mDownX-x;
+                    mDownX=x;
+                    itemview.scrollBy(deltax,0);
+*/
+                    break;
+                case MotionEvent.ACTION_UP:
+                    this.mUpX = ev.getX();
+                    this.mUpY = ev.getY();
+                    this.onrightFlingListener.onRightFling(mTouchPosition, this.mUpX - this.mDownX, this.mUpX, this.mUpY);
+                    if (mTouchState == TOUCH_STATE_X) {
+                        if (mTouchView != null) {
+                            mTouchView.onSwipe(ev);
+                            if (!mTouchView.isOpen()) {
+                                mTouchPosition = -1;
+                                mTouchView = null;
+                            }
+                        }
+                        if (mOnSwipeListener != null) {
+                            mOnSwipeListener.onSwipeEnd(mTouchPosition);
+                        }
+                        ev.setAction(MotionEvent.ACTION_CANCEL);
+                        super.onTouchEvent(ev);
+                        return true;
+                    }
+                    break;
+
+        }
+            return super.onTouchEvent(ev);
+        }
 
 	public void smoothOpenMenu(int position) {
 		if (position >= getFirstVisiblePosition()
@@ -238,4 +317,63 @@ public class SwipeMenuListView extends ListView {
 
 		void onSwipeEnd(int position);
 	}
+
+    private void addVellocityTracker(MotionEvent event){
+        if(velocityTracker==null){
+            velocityTracker=VelocityTracker.obtain();
+        }
+        velocityTracker.addMovement(event);
+    }
+
+    private void recycleVelocityTracker(){
+        if(velocityTracker!=null){
+            velocityTracker.recycle();
+            velocityTracker=null;
+        }
+    }
+
+    private int getScrollVelocity(){
+        velocityTracker.computeCurrentVelocity(1000);
+        int vellocity=(int)velocityTracker.getXVelocity();
+        return vellocity;
+    }
+
+    private void scrollRight(){
+        removedirection=Removedirection.Right;
+        final int delta=(screenwidth+itemview.getScrollX());
+        mscroller.startScroll(itemview.getScrollX(),0,-delta,0,Math.abs(delta));
+        postInvalidate();
+    }
+
+    private void scrollLeft(){
+        removedirection=Removedirection.Left;
+        final int delta=(screenwidth-itemview.getScrollX());
+        mscroller.startScroll(itemview.getScrollX(),0,delta,0);
+        postInvalidate();
+    }
+
+    private void scrollByDistanceX(){
+        if(itemview.getScrollX()>=screenwidth/2){
+            scrollLeft();
+        }else if(itemview.getScrollX()>=-screenwidth/2){
+            scrollRight();
+        }else{
+            itemview.scrollTo(0,0);
+        }
+    }
+
+    @Override
+    public void computeScroll() {
+
+        if(mscroller.computeScrollOffset()){
+            itemview.scrollTo(mscroller.getCurrX(),mscroller.getCurrY());
+            postInvalidate();
+
+            if(mscroller.isFinished()){
+                itemview.scrollTo(0,0);
+            }
+        }
+
+        super.computeScroll();
+    }
 }

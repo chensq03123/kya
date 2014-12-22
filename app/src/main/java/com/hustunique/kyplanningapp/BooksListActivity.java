@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class BooksListActivity extends Activity {
     private ListView bookslistview;
     private BooksBaseAdapter madapter;
     private TextView addbtn;
+    private ImageView backbtn;
     private MyAsyncTask task;
     private LinearLayout informlayout;
     private Animation animin,animaout;
@@ -81,9 +83,13 @@ public class BooksListActivity extends Activity {
 
         informlayout=(LinearLayout)findViewById(R.id.success);
 
-
-
-
+        backbtn=(ImageView)findViewById(R.id.backbtn);
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BooksListActivity.this.finish();
+            }
+        });
         addbtn=(TextView)findViewById(R.id.addbook_btn);
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override

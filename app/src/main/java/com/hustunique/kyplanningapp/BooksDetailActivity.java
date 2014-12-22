@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,6 +32,7 @@ public class BooksDetailActivity extends Activity {
     private Pointwithcolor largpoint;
     private TextView booknamechar,bookname,publisher,author,progress;
     private TextView completebtn;
+    private ImageView backbtn;
     private int color;
     private FrameLayout actionbar;
     private RotateAnimation animation;
@@ -124,5 +126,12 @@ public class BooksDetailActivity extends Activity {
             progress=(TextView)findViewById(R.id.detail_progress);
             largpoint=(Pointwithcolor)findViewById(R.id.detail_point);
             completebtn=(TextView)findViewById(R.id.addplan_completebtn);
+            backbtn=(ImageView)findViewById(R.id.backbtn);
+            backbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BooksDetailActivity.this.finish();
+                }
+            });
 	}
 }

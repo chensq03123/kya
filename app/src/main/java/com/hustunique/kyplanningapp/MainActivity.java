@@ -159,7 +159,7 @@ public class MainActivity extends Activity {
             @Override
             public boolean onRightFling(int i, float v, float v2, float v3) {
 
-                if(i==mainlist.pointToPosition((int)v2,(int)v3)&&v>100&&!SwipeMenuListView.IsOpen){
+                if(i==mainlist.pointToPosition((int)v2,(int)v3)&&v>300&&!SwipeMenuListView.IsOpen){
                     //Toast.makeText(MainActivity.this,list.get(i).item.get("chapname"),Toast.LENGTH_LONG).show();
                     completeplan(i);
                 }
@@ -192,6 +192,7 @@ public class MainActivity extends Activity {
     }
 
     private void Delete(int index){
+        Dbhelper.updatechaptag(0,Integer.parseInt(list.get(index).item.get("chapid").toString()));
         if(index==0){
             DataConstances.header=DataConstances.header.next;
         }else {
