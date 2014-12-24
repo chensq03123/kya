@@ -14,6 +14,7 @@ import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -82,7 +83,7 @@ public class AddBooksActivity extends Activity{
             tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             // Holo light action bar color is #DDDDDD
-            int actionBarColor = Color.rgb(0x25,0xdc,0xca);
+            int actionBarColor = Color.rgb(0x25-DataConstances.colordiv,0xdc-DataConstances.colordiv,0xca-DataConstances.colordiv);
             tintManager.setTintColor(actionBarColor);
         }
 		IniteWidgets();
@@ -232,7 +233,7 @@ public class AddBooksActivity extends Activity{
 
                     colorselected=((Pointwithcolor) view).getColor();
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        tintManager.setStatusBarTintColor(colorselected);
+                        tintManager.setStatusBarTintColor(colorselected-DataConstances.colordive2);
                     }
                     adapter.setColor(colorselected);
                     adapter.notifyDataSetInvalidated();

@@ -122,10 +122,11 @@
     
         
     </LinearLayout>
-		<ImageView 
+		<ImageView
+            android:alpha="75"
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="2dp"
-	    	android:background="#eee"/>
+	    	android:background="@drawable/gradientimg"/>
     <FrameLayout
 
         android:layout_width="match_parent"
@@ -136,7 +137,7 @@
             android:layout_height="wrap_content">
         <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/main_listview"
-            android:divider="#000"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></com.baoyz.swipemenulistview.SwipeMenuListView>
         </LinearLayout>

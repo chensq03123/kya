@@ -71,7 +71,7 @@ public class BooksListActivity extends Activity {
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             // Holo light action bar color is #DDDDDD
-            int actionBarColor = Color.rgb(0x25,0xdc,0xca);
+            int actionBarColor = Color.rgb(0x25-DataConstances.colordiv, 0xdc-DataConstances.colordiv, 0xca-DataConstances.colordiv);
             tintManager.setTintColor(actionBarColor);
         }
 
@@ -140,10 +140,11 @@ public class BooksListActivity extends Activity {
 
     private void AnimationController(int colorselected){
         informlayout.setBackgroundColor(colorselected);
+        informlayout.setAlpha(0.7f);
         animin= AnimationUtils.loadAnimation(BooksListActivity.this,R.anim.animation_in);
         animaout=AnimationUtils.loadAnimation(BooksListActivity.this,R.anim.animation_out);
         animin.setDuration(1000);
-        animaout.setStartOffset(3000);
+        animaout.setStartOffset(1500);
         animaout.setDuration(1000);
         animin.setAnimationListener(new Animation.AnimationListener() {
             @Override

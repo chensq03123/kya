@@ -51,7 +51,7 @@ public class MyApplication extends Application {
 
         MyBroadcastReciever reciever=new MyBroadcastReciever();
         IntentFilter filter=new IntentFilter();
-        filter.addAction(DataConstances.ADDPLAN_ACTION);
+       // filter.addAction(DataConstances.ADDPLAN_ACTION);
         filter.addAction(DataConstances.POPULIST_ACTION);
         registerReceiver(reciever,filter);
 

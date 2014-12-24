@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
             SystemBarTintManager tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             // Holo light action bar color is #DDDDDD
-            int actionBarColor = Color.rgb(0x25,0xdc,0xca);
+            int actionBarColor = Color.rgb(0x25-DataConstances.colordiv, 0xdc-DataConstances.colordiv, 0xca-DataConstances.colordiv);
             tintManager.setTintColor(actionBarColor);
         }
 

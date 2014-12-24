@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -51,7 +52,7 @@ public class BooksDetailActivity extends Activity {
             tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintEnabled(true);
             // Holo light action bar color is #DDDDDD
-            int actionBarColor = Color.rgb(0x25, 0xdc, 0xca);
+            int actionBarColor = Color.rgb(0x25-DataConstances.colordiv, 0xdc-DataConstances.colordiv, 0xca-DataConstances.colordiv);
             tintManager.setTintColor(actionBarColor);
         }
 
@@ -67,7 +68,7 @@ public class BooksDetailActivity extends Activity {
         color=Integer.valueOf(map.get("color"));
         actionbar.setBackgroundColor(color);
         if(tintManager!=null)
-            tintManager.setTintColor(color);
+            tintManager.setTintColor(color-DataConstances.colordive2);
         largpoint.setColor(color);
         bookname.setText(map.get("bookname"));
         booknamechar.setText(map.get("bookname").substring(0,1));

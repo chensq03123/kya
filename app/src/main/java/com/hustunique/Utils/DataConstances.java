@@ -14,7 +14,8 @@ public class DataConstances {
     public static String getMonth(int month){
         return months[month];
     }
-
+    public static int colordiv=0x17;
+    public static int colordive2=0x171717;
 
 
 }

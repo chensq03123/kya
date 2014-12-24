@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:descendantFocusability="blocksDescendants"
-    android:background="#fff"
+    android:background="#fafafa"
     android:orientation="horizontal" >
       <FrameLayout 
     	        android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
       		        android:id="@+id/chapter"
       		        android:layout_width="wrap_content"
       		        android:layout_height="wrap_content"
-                    android:textColor="#dd000000"
+                    android:textColor="#555"
                     android:singleLine="true"
       		        android:textSize="18sp"
       		        android:layout_gravity="left"
