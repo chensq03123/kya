@@ -87,6 +87,7 @@ public class BooksListActivity extends Activity {
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                BooksListActivity.this.unregisterReceiver(mreceiver);
                 BooksListActivity.this.finish();
             }
         });
@@ -176,5 +177,11 @@ public class BooksListActivity extends Activity {
         mlist= Dbhelper.querybook("select * from book",null);
         madapter.notifyDataSetChanged();
         madapter.notifyDataSetInvalidated();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BooksListActivity.this.unregisterReceiver(mreceiver);
     }
 }
